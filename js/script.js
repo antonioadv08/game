@@ -75,7 +75,7 @@ function keyUpHandler(e) {
 function moveBullets() {
     for (var i in bullets) {
         var bullet = bullets[i];
-        bullet.y -= 2;
+        bullet.y -= 5;
     }
     bullets = bullets.filter(function (bullet) {
         return bullet.y > 0;
@@ -94,7 +94,7 @@ function shoot() {
 
 function drawBullets() {
     ctx.save();
-    ctx.fillStyle = "white";
+    ctx.fillStyle = "black";
     for (var i in bullets) {
         var bullet = bullets[i];
         ctx.fillRect(bullet.x, bullet.y, bullet.width, bullet.height);
@@ -127,12 +127,15 @@ function drawPlayer() {
     ctx.closePath();
 }
 
+
+
 function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     drawBall();
     drawPlayer();
     moveBullets()
     drawBullets()
+  
 
     if (ballX + dx > canvas.width - ballRadius || ballX + dx < ballRadius) {
         dx = -dx;
@@ -152,8 +155,9 @@ function draw() {
     if (downPressed && playerY < canvas.height - playerHeight) {
         playerY += 7;
     }
-    if (spaceBar = true) {
+    if (!spaceBar == false) {
         shoot()
+
     }
 
 
