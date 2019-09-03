@@ -15,6 +15,7 @@ var rightPressed = false;
 var leftPressed = false;
 var upPressed = false;
 var downPressed = false;
+var bullets;
 
 document.addEventListener("keydown", keyDownHandler, false);
 document.addEventListener("keyup", keyUpHandler, false);
@@ -22,13 +23,14 @@ document.addEventListener("mousemove", mouseMoveHandler, false);
 
 function mouseMoveHandler(e) {
     var relativeX = e.clientX - canvas.offsetLeft;
-    if(relativeX > 0 && relativeX < canvas.width) {
-        playerX = relativeX - playerWidth/2;
+    if (relativeX > 0 && relativeX < canvas.width) {
+        playerX = relativeX - playerWidth / 2;
     }
     var relativeY = e.clientY - canvas.offsetTop;
-    if(relativeY > 0 && relativeY < canvas.height) {
-        playerY = relativeY - playerHeight/2;
+    if (relativeY > 0 && relativeY < canvas.height) {
+        playerY = relativeY - playerHeight / 2;
     }
+
 }
 
 function keyDownHandler(e) {
@@ -60,6 +62,21 @@ function keyUpHandler(e) {
         downPressed = false;
     }
 }
+
+
+
+function makeBullets() {
+    for (var i in bullets) {
+      var bullet=bullets[i];
+    }
+}
+
+function shoot(){
+    guns.push
+
+}
+
+
 
 
 
@@ -102,10 +119,10 @@ function draw() {
     if (downPressed && playerY < canvas.height - playerHeight) {
         playerY += 7;
     }
-   
 
-        ballX += dx;
-        ballY += dy;
-    }
 
-    setInterval(draw, 10);
+    ballX += dx;
+    ballY += dy;
+}
+
+setInterval(draw, 10);
