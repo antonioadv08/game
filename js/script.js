@@ -15,7 +15,8 @@ var rightPressed = false;
 var leftPressed = false;
 var upPressed = false;
 var downPressed = false;
-var bullets;
+var spaceBar = false;
+var bullets = [];
 
 document.addEventListener("keydown", keyDownHandler, false);
 document.addEventListener("keyup", keyUpHandler, false);
@@ -46,6 +47,9 @@ function keyDownHandler(e) {
     else if (e.keyCode == 40) {
         downPressed = true;
     }
+    else if (e.keyCode == 32) {
+        spaceBar = true;
+    }
 
 }
 function keyUpHandler(e) {
@@ -61,20 +65,47 @@ function keyUpHandler(e) {
     else if (e.keyCode == 40) {
         downPressed = false;
     }
-}
-
-
-
-function makeBullets() {
-    for (var i in bullets) {
-      var bullet=bullets[i];
+    else if (e.keyCode == 32) {
+        spaceBar = false;
     }
 }
 
-function shoot(){
-    guns.push
+
+
+function moveBullets() {
+    for (var i in bullets) {
+        var bullet = bullets[i];
+        bullet.y -= 2;
+    }
+    bullets = bullets.filter(function (bullet) {
+        return bullet.y > 0;
+    });
+}
+
+function shoot() {
+    bullets.push({
+        x: playerX,
+        y: playerY,
+        width: 10,
+        height: 10
+    });
 
 }
+
+function drawBullets() {
+    ctx.save();
+    ctx.fillStyle = "white";
+    for (var i in bullets) {
+        var bullet = bullets[i];
+        ctx.fillRect(bullet.x, bullet.y, bullet.width, bullet.height);
+    }
+
+    ctx.restore();
+
+}
+
+
+
 
 
 
@@ -100,6 +131,8 @@ function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     drawBall();
     drawPlayer();
+    moveBullets()
+    drawBullets()
 
     if (ballX + dx > canvas.width - ballRadius || ballX + dx < ballRadius) {
         dx = -dx;
@@ -118,6 +151,9 @@ function draw() {
     }
     if (downPressed && playerY < canvas.height - playerHeight) {
         playerY += 7;
+    }
+    if (spaceBar = true) {
+        shoot()
     }
 
 
