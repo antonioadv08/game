@@ -17,10 +17,26 @@ var upPressed = false;
 var downPressed = false;
 var spaceBar = false;
 var bullets = [];
+var enemies = [];
+var game = {
+    state: "start"
+}
+var background;
+
+
+
+
 
 document.addEventListener("keydown", keyDownHandler, false);
 document.addEventListener("keyup", keyUpHandler, false);
 document.addEventListener("mousemove", mouseMoveHandler, false);
+
+
+
+
+
+
+
 
 function mouseMoveHandler(e) {
     var relativeX = e.clientX - canvas.offsetLeft;
@@ -71,6 +87,62 @@ function keyUpHandler(e) {
 }
 
 
+function loadBackground() {
+    background = new Image();
+    background.src = "/images/background.jpg";
+    background.onload = function () {
+        var intervale = window.setInterval(frameLoop, 1000 / 55);
+    }
+}
+
+loadBackground();
+
+
+function drawBackground() {
+    ctx.drawImage(background, 0, 0,x,y)
+}
+
+
+
+
+
+function drawEnemies() {
+    for (i in enemies) {
+        var enemy = enemies[i];
+        ctx.save();
+        if (enemy.state == "alive") ctx.fillStyle = "green";
+        if (enemy.state == "dead") ctx.fillStyle = "red";
+        ctx.fillRect(enemy.x, enemy.y, enemy.width, enemy.height);
+
+
+    }
+}
+
+function refreshEnemies() {
+    if (game.state == "start") {
+        for (var i = 0; i < 10; i++) {
+            enemies.push({
+                x: 10 + (i * 50),
+                y: 10,
+                height: 40,
+                width40: 40,
+                state: "alive",
+                counter: 0
+            });
+        }
+        game.state = "start";
+
+    }
+    for (var i in enemies) {
+        var enemy = enemies[i];
+        if (!enemy) continue;
+        if (enemy && enemy.state == "alive") {
+            enemy.counter++;
+            enemy.x += Math.sin(enemy.counter * Math.PI / 90) * 5;
+        }
+    }
+
+}
 
 function moveBullets() {
     for (var i in bullets) {
@@ -131,11 +203,14 @@ function drawPlayer() {
 
 function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+    drawBackground();
     drawBall();
     drawPlayer();
-    moveBullets()
-    drawBullets()
-  
+    moveBullets();
+    drawBullets();
+    drawEnemies();
+    refreshEnemies();
+
 
     if (ballX + dx > canvas.width - ballRadius || ballX + dx < ballRadius) {
         dx = -dx;
