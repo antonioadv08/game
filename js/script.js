@@ -116,6 +116,18 @@ function drawEnemies() {
     }
 }
 
+function moveEnemies(){
+    for (var i in enemies) {
+        var enemy = enemies[i];
+        enemy.y += 4;
+    }
+    enemies = enemies.filter(function (enemy) {
+        return enemy.y > 0;
+    });
+
+
+}
+
 function refreshEnemies() {
     if (game.state == "start") {
         for (var i = 0; i < 10; i++) {
@@ -136,7 +148,7 @@ function refreshEnemies() {
         if (!enemy) continue;
         if (enemy && enemy.state == "alive") {
             enemy.counter++;
-            enemy.x += Math.sin(enemy.counter * Math.PI / 90) * 5;
+            // enemy.x += Math.sin(enemy.counter * Math.PI / 90) * 5;
         }
         if (enemy && enemy.state == "hit") {
             enemy.counter++;
@@ -255,6 +267,7 @@ function draw() {
     drawBullets();
     verifyHit();
     drawEnemies();
+    moveEnemies();
     // refreshEnemies();
 
 
