@@ -22,6 +22,8 @@ var game = {
     state: "start"
 }
 var background;
+var imgPlayer, imgBullet, imgEnemies;
+var soundShoot,soundKill;
 
 
 
@@ -34,15 +36,13 @@ document.addEventListener("mousemove", mouseMoveHandler, false);
 
 
 
-
-
-
-
 function mouseMoveHandler(e) {
     var relativeX = e.clientX - canvas.offsetLeft;
     if (relativeX > 0 && relativeX < canvas.width) {
         playerX = relativeX - playerWidth / 2;
     }
+
+
     var relativeY = e.clientY - canvas.offsetTop;
     if (relativeY > 0 && relativeY < canvas.height) {
         playerY = relativeY - playerHeight / 2;
@@ -68,6 +68,7 @@ function keyDownHandler(e) {
     }
 
 }
+
 function keyUpHandler(e) {
     if (e.keyCode == 39) {
         rightPressed = false;
@@ -99,6 +100,20 @@ function drawBackground() {
     ctx.drawImage(background, 0, 0, x, y)
 }
 
+function loadPlayer() {
+    imgPlayer = new Image();
+    imgPlayer.src = "/images/NicePng_garbage-png_982423.png";
+}
+
+function loadEnemies() {
+    imgEnemies = new Image();
+    imgEnemies.src = "/images/bolsabasura.png";
+}
+
+function loadBullet() {
+    imgBullet = new Image();
+    imgBullet.src = "/images/cubobasura.png";
+}
 
 
 
@@ -109,14 +124,14 @@ function drawEnemies() {
         ctx.save();
         if (enemy.state == "alive") ctx.fillStyle = "green";
         if (enemy.state == "dead") ctx.fillStyle = "red";
-        ctx.fillRect(enemy.x, enemy.y, enemy.width, enemy.height);
+        ctx.drawImage(imgEnemies, enemy.x, enemy.y, enemy.width, enemy.height);
         ctx.restore();
 
 
     }
 }
 
-function moveEnemies(){
+function moveEnemies() {
     for (var i in enemies) {
         var enemy = enemies[i];
         enemy.y += 4;
@@ -140,7 +155,8 @@ function refreshEnemies() {
                 counter: 0
             });
         }
-        game.state = "start";
+        // game.state = "start";
+
 
     }
     for (var i in enemies) {
@@ -163,6 +179,7 @@ function refreshEnemies() {
         return false;
     });
 
+
 }
 
 function moveBullets() {
@@ -179,8 +196,8 @@ function shoot() {
     bullets.push({
         x: playerX + (playerWidth / 2) - 5,
         y: playerY,
-        width: 10,
-        height: 10
+        width: 50,
+        height: 50
     });
 
 }
@@ -190,7 +207,7 @@ function drawBullets() {
     ctx.fillStyle = "black";
     for (var i in bullets) {
         var bullet = bullets[i];
-        ctx.fillRect(bullet.x, bullet.y, bullet.width, bullet.height);
+        ctx.drawImage(imgBullet, bullet.x, bullet.y, bullet.width, bullet.height);
     }
 
     ctx.restore();
@@ -229,7 +246,7 @@ function verifyHit() {
             var enemy = enemies[j];
             if (hit(bullet, enemy)) {
                 enemy.state = "hit";
-                enemy.counter = 0;
+                enemy.counter = 10;
             }
         }
     }
@@ -249,9 +266,11 @@ function drawBall() {
 
 function drawPlayer() {
     ctx.beginPath();
-    ctx.rect(playerX, playerY, playerWidth, playerHeight);
-    ctx.fillStyle = "#0095DD";
-    ctx.fill();
+    ctx.drawImage(imgPlayer, playerX, playerY, playerHeight, playerWidth)
+
+    // ctx.rect(playerX, playerY, playerWidth, playerHeight);
+    // ctx.fillStyle = "#0095DD";
+    // ctx.fill();
     ctx.closePath();
 }
 
@@ -262,10 +281,13 @@ function draw() {
     loadBackground();
     drawBackground();
     drawBall();
+    loadPlayer()
     drawPlayer();
+    loadBullet();
     moveBullets();
     drawBullets();
     verifyHit();
+    loadEnemies() 
     drawEnemies();
     moveEnemies();
     // refreshEnemies();
