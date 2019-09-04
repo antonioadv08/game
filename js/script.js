@@ -88,31 +88,23 @@ function keyUpHandler(e) {
 }
 
 
-function loadBackground() {
+function loadMedia() {
     background = new Image();
     background.src = "/images/background.jpg";
-
+    imgPlayer = new Image();
+    imgPlayer.src = "/images/señordelabasura.png";
+    imgEnemies = new Image();
+    imgEnemies.src = "/images/bolsabasura.png";
+    imgBullet = new Image();
+    imgBullet.src = "/images/cubobasura.png";
 }
+
+
 
 
 
 function drawBackground() {
     ctx.drawImage(background, 0, 0, x, y)
-}
-
-function loadPlayer() {
-    imgPlayer = new Image();
-    imgPlayer.src = "/images/NicePng_garbage-png_982423.png";
-}
-
-function loadEnemies() {
-    imgEnemies = new Image();
-    imgEnemies.src = "/images/bolsabasura.png";
-}
-
-function loadBullet() {
-    imgBullet = new Image();
-    imgBullet.src = "/images/cubobasura.png";
 }
 
 
@@ -278,16 +270,13 @@ function drawPlayer() {
 
 function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    loadBackground();
+    loadMedia();
     drawBackground();
     drawBall();
-    loadPlayer()
     drawPlayer();
-    loadBullet();
     moveBullets();
     drawBullets();
     verifyHit();
-    loadEnemies() 
     drawEnemies();
     moveEnemies();
     // refreshEnemies();
