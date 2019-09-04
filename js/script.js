@@ -90,16 +90,13 @@ function keyUpHandler(e) {
 function loadBackground() {
     background = new Image();
     background.src = "/images/background.jpg";
-    background.onload = function () {
-        var intervale = window.setInterval(frameLoop, 1000 / 55);
-    }
+
 }
 
-loadBackground();
 
 
 function drawBackground() {
-    ctx.drawImage(background, 0, 0,x,y)
+    ctx.drawImage(background, 0, 0, x, y)
 }
 
 
@@ -125,7 +122,7 @@ function refreshEnemies() {
                 x: 10 + (i * 50),
                 y: 10,
                 height: 40,
-                width40: 40,
+                width: 40,
                 state: "alive",
                 counter: 0
             });
@@ -147,7 +144,7 @@ function refreshEnemies() {
 function moveBullets() {
     for (var i in bullets) {
         var bullet = bullets[i];
-        bullet.y -= 5;
+        bullet.y -= 8;
     }
     bullets = bullets.filter(function (bullet) {
         return bullet.y > 0;
@@ -156,7 +153,7 @@ function moveBullets() {
 
 function shoot() {
     bullets.push({
-        x: playerX,
+        x: playerX + (playerWidth / 2) - 5,
         y: playerY,
         width: 10,
         height: 10
@@ -178,7 +175,28 @@ function drawBullets() {
 
 
 
+function hit(a, b) {
+    var hit = false;
+    if (b.x + b.width >= a.x && b.x < a.x + a.width) {
+        if (b.y + b.height >= a.y && b.y < a.y + a.height) {
+            hit = true;
+        }
+    }
+    if (b.x <= a.x && b.x + b.width >= a.x + a.width) {
+        if (b.y <= a.y && b.y + b.height >= a.y + a.height) {
+            hit = true;
 
+        }
+    }
+    if (a.x <= b.x && a.x + a.width >= b.x + b.width) {
+        if (a.y <= b.y && a.y + a.height >= b.y + b.height) {
+            hit = true;
+        }
+    }
+    return hit;
+
+
+}
 
 
 
@@ -203,13 +221,13 @@ function drawPlayer() {
 
 function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+    loadBackground();
     drawBackground();
     drawBall();
     drawPlayer();
     moveBullets();
     drawBullets();
-    drawEnemies();
-    refreshEnemies();
+
 
 
     if (ballX + dx > canvas.width - ballRadius || ballX + dx < ballRadius) {
