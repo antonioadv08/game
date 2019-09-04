@@ -23,7 +23,7 @@ var game = {
 }
 var background;
 var imgPlayer, imgBullet, imgEnemies;
-var soundShoot,soundKill;
+var soundShoot, soundKill;
 
 
 
@@ -97,6 +97,9 @@ function loadMedia() {
     imgEnemies.src = "/images/bolsabasura.png";
     imgBullet = new Image();
     imgBullet.src = "/images/cubobasura.png";
+    // soundShoot = document.createElement("audio");
+    // document.body.appendChild(soundShoot);
+    // soundShoot.setAttribute("src","/sounds/zapsplat_foley_bag_school_rucksack_open_001_33251.mp3")
 }
 
 
@@ -185,6 +188,10 @@ function moveBullets() {
 }
 
 function shoot() {
+    // soundShoot.pause();
+    // soundShoot.currentTime = 0;
+    // soundShoot.play();
+
     bullets.push({
         x: playerX + (playerWidth / 2) - 5,
         y: playerY,
