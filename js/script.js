@@ -110,6 +110,7 @@ function drawEnemies() {
         if (enemy.state == "alive") ctx.fillStyle = "green";
         if (enemy.state == "dead") ctx.fillStyle = "red";
         ctx.fillRect(enemy.x, enemy.y, enemy.width, enemy.height);
+        ctx.restore();
 
 
     }
@@ -137,7 +138,18 @@ function refreshEnemies() {
             enemy.counter++;
             enemy.x += Math.sin(enemy.counter * Math.PI / 90) * 5;
         }
+        if (enemy && enemy.state == "hit") {
+            enemy.counter++;
+            if (enemy.counter >= 20) {
+                enemy.state = "dead";
+                enemy.counter = 0;
+            }
+        }
     }
+    enemies = enemies.filter(function (enemy) {
+        if (enemy && enemy.state != "died") return true;
+        return false;
+    });
 
 }
 
@@ -198,6 +210,20 @@ function hit(a, b) {
 
 }
 
+function verifyHit() {
+    for (var i in bullets) {
+        var bullet = bullets[i];
+        for (j in enemies) {
+            var enemy = enemies[j];
+            if (hit(bullet, enemy)) {
+                enemy.state = "hit";
+                enemy.counter = 0;
+            }
+        }
+    }
+
+}
+
 
 
 
@@ -227,6 +253,9 @@ function draw() {
     drawPlayer();
     moveBullets();
     drawBullets();
+    verifyHit();
+    drawEnemies();
+    // refreshEnemies();
 
 
 
