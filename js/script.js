@@ -1,5 +1,7 @@
 var canvas = document.getElementById("myCanvas");
 var ctx = canvas.getContext("2d");
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
 var ballRadius = 10;
 var x = canvas.width;
 var y = canvas.height;
@@ -24,7 +26,6 @@ var game = {
 var background;
 var imgPlayer, imgBullet, imgEnemies;
 var soundShoot, soundKill;
-
 
 
 
@@ -90,7 +91,7 @@ function keyUpHandler(e) {
 
 function loadMedia() {
     background = new Image();
-    background.src = "/images/background.jpg";
+    background.src = "/images/33087.jpg";
     imgPlayer = new Image();
     imgPlayer.src = "/images/señordelabasura.png";
     imgEnemies = new Image();
@@ -100,6 +101,7 @@ function loadMedia() {
     // soundShoot = document.createElement("audio");
     // document.body.appendChild(soundShoot);
     // soundShoot.setAttribute("src","/sounds/zapsplat_foley_bag_school_rucksack_open_001_33251.mp3")
+
 }
 
 
@@ -107,7 +109,7 @@ function loadMedia() {
 
 
 function drawBackground() {
-    ctx.drawImage(background, 0, 0, x, y)
+    ctx.drawImage(background, 0, 0, canvas.width, canvas.height)
 }
 
 
@@ -119,6 +121,7 @@ function drawEnemies() {
         ctx.save();
         if (enemy.state == "alive") ctx.fillStyle = "green";
         if (enemy.state == "dead") ctx.fillStyle = "red";
+        ctx.fillRect(enemy.x, enemy.y, enemy.width, enemy.height);
         ctx.drawImage(imgEnemies, enemy.x, enemy.y, enemy.width, enemy.height);
         ctx.restore();
 
@@ -126,10 +129,13 @@ function drawEnemies() {
     }
 }
 
+
+
 function moveEnemies() {
     for (var i in enemies) {
         var enemy = enemies[i];
-        enemy.y += 4;
+        enemy.y += 1;
+        enemy.x += Math.random() * (20 - -20) + (-20);
     }
     enemies = enemies.filter(function (enemy) {
         return enemy.y > 0;
@@ -140,17 +146,17 @@ function moveEnemies() {
 
 function refreshEnemies() {
     if (game.state == "start") {
-        for (var i = 0; i < 10; i++) {
+        for (var i = 0; i < 13; i++) {
             enemies.push({
-                x: 10 + (i * 50),
-                y: 10,
+                x: 10 + (i * 150),
+                y: 10 ,
                 height: 40,
                 width: 40,
                 state: "alive",
                 counter: 0
             });
         }
-        // game.state = "start";
+        game.state = "start";
 
 
     }
@@ -202,14 +208,12 @@ function shoot() {
 }
 
 function drawBullets() {
-    ctx.save();
-    ctx.fillStyle = "black";
+
     for (var i in bullets) {
         var bullet = bullets[i];
         ctx.drawImage(imgBullet, bullet.x, bullet.y, bullet.width, bullet.height);
     }
 
-    ctx.restore();
 
 }
 
@@ -245,7 +249,7 @@ function verifyHit() {
             var enemy = enemies[j];
             if (hit(bullet, enemy)) {
                 enemy.state = "hit";
-                enemy.counter = 10;
+                enemy.counter = 0;
             }
         }
     }
@@ -264,14 +268,14 @@ function drawBall() {
 }
 
 function drawPlayer() {
-    ctx.beginPath();
     ctx.drawImage(imgPlayer, playerX, playerY, playerHeight, playerWidth)
 
-    // ctx.rect(playerX, playerY, playerWidth, playerHeight);
-    // ctx.fillStyle = "#0095DD";
-    // ctx.fill();
-    ctx.closePath();
+
 }
+
+
+
+
 
 
 
@@ -285,7 +289,7 @@ function draw() {
     drawBullets();
     verifyHit();
     drawEnemies();
-    moveEnemies();
+    // moveEnemies();
     // refreshEnemies();
 
 
@@ -319,3 +323,5 @@ function draw() {
 }
 
 setInterval(draw, 10);
+setInterval(refreshEnemies, 2000);
+setInterval(moveEnemies, 50)
