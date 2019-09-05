@@ -98,8 +98,7 @@ function loadMedia() {
     // soundShoot = document.createElement("audio");
     // document.body.appendChild(soundShoot);
     // soundShoot.setAttribute("src", "/sounds/zapsplat_foley_bag_school_rucksack_open_001_33251.mp3")
-    // imgButton = new Image();
-    // imgButton.src = "/images/button.png"
+  
 
 }
 
@@ -148,8 +147,9 @@ function moveEnemies() {
 
 function refreshEnemies() {
     if (playing == true) {
-        for (var i = 0; i < 8; i++) {
+        for (var i = 0; i < 12; i++) {
             enemies.push({
+                
                 x: 10 + (i * 150),
                 y: 10,
                 height: 40,
