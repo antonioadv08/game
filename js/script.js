@@ -4,9 +4,6 @@ canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 var x = canvas.width;
 var y = canvas.height;
-var ballX = canvas.width / 2;
-var ballY = canvas.height - 30;
-
 var playerHeight = 75;
 var playerWidth = 75;
 var playerX = (canvas.width - playerWidth) / 2;
@@ -23,7 +20,7 @@ var startButton;
 var background;
 var imgPlayer, imgBullet, imgEnemies;
 var soundShoot, soundKill;
-
+var score = 0;
 
 
 
@@ -98,7 +95,7 @@ function loadMedia() {
     // soundShoot = document.createElement("audio");
     // document.body.appendChild(soundShoot);
     // soundShoot.setAttribute("src", "/sounds/zapsplat_foley_bag_school_rucksack_open_001_33251.mp3")
-  
+
 
 }
 
@@ -116,13 +113,10 @@ function drawBackground() {
 function drawEnemies() {
     for (i in enemies) {
         var enemy = enemies[i];
-        // ctx.save();
         if (enemy.state == "alive") ctx.fillStyle = "green";
         if (enemy.state == "dead") ctx.fillStyle = "red";
 
-        // ctx.fillRect(enemy.x, enemy.y, enemy.width, enemy.height);
         ctx.drawImage(imgEnemies, enemy.x, enemy.y, enemy.width, enemy.height);
-        // ctx.restore();
 
 
     }
@@ -149,7 +143,7 @@ function refreshEnemies() {
     if (playing == true) {
         for (var i = 0; i < 12; i++) {
             enemies.push({
-                
+
                 x: 10 + (i * 150),
                 y: 10,
                 height: 40,
@@ -174,6 +168,7 @@ function refreshEnemies() {
                 enemy.state = "dead";
                 enemy.counter = 0;
                 enemies = enemies.filter(function (arr) {
+                    score++;
                     return arr.state !== 'dead';
                 });
 
@@ -265,7 +260,12 @@ function verifyHit() {
 
 }
 
+function drawScore() {
+    ctx.font = "50px Arial";
+    ctx.fillStyle = "#A2232E";
+    ctx.fillText("Score: " + score, 20, canvas.height / 2);
 
+}
 
 
 
@@ -283,7 +283,7 @@ function startGame() {
     var elem = document.getElementById("button");
     elem.parentNode.removeChild(elem);
 
-    var elemcanvas=document.getElementById("myCanvas")
+    var elemcanvas = document.getElementById("myCanvas")
     elemcanvas.style = null;
 
 
@@ -304,6 +304,7 @@ function draw() {
     moveBullets();
     verifyHit();
     drawEnemies();
+    drawScore()
 
     // moveEnemies();
     // refreshEnemies();
