@@ -20,9 +20,8 @@ var downPressed = false;
 var spaceBar = false;
 var bullets = [];
 var enemies = [];
-var game = {
-    state: "start"
-}
+var playing = false;
+var startButton;
 var background;
 var imgPlayer, imgBullet, imgEnemies;
 var soundShoot, soundKill;
@@ -100,7 +99,9 @@ function loadMedia() {
     imgBullet.src = "/images/cubobasura.png";
     // soundShoot = document.createElement("audio");
     // document.body.appendChild(soundShoot);
-    // soundShoot.setAttribute("src","/sounds/zapsplat_foley_bag_school_rucksack_open_001_33251.mp3")
+    // soundShoot.setAttribute("src", "/sounds/zapsplat_foley_bag_school_rucksack_open_001_33251.mp3")
+    // imgButton = new Image();
+    // imgButton.src = "/images/button.png"
 
 }
 
@@ -121,6 +122,9 @@ function drawEnemies() {
         ctx.save();
         if (enemy.state == "alive") ctx.fillStyle = "green";
         if (enemy.state == "dead") ctx.fillStyle = "red";
+        // var enemy = (arr, item) => {
+        //     return enemy.filter(e => e !== item);
+        // };
         ctx.fillRect(enemy.x, enemy.y, enemy.width, enemy.height);
         ctx.drawImage(imgEnemies, enemy.x, enemy.y, enemy.width, enemy.height);
         ctx.restore();
@@ -134,7 +138,7 @@ function drawEnemies() {
 function moveEnemies() {
     for (var i in enemies) {
         var enemy = enemies[i];
-        enemy.y += 1;
+        enemy.y += 3;
         enemy.x += Math.random() * (20 - -20) + (-20);
     }
     enemies = enemies.filter(function (enemy) {
@@ -145,18 +149,18 @@ function moveEnemies() {
 }
 
 function refreshEnemies() {
-    if (game.state == "start") {
+    if (playing == true) {
         for (var i = 0; i < 13; i++) {
             enemies.push({
                 x: 10 + (i * 150),
-                y: 10 ,
+                y: 10,
                 height: 40,
                 width: 40,
                 state: "alive",
                 counter: 0
             });
         }
-        game.state = "start";
+        // playing = true;
 
 
     }
@@ -169,7 +173,7 @@ function refreshEnemies() {
         }
         if (enemy && enemy.state == "hit") {
             enemy.counter++;
-            if (enemy.counter >= 20) {
+            if (enemy.counter >= 0) {
                 enemy.state = "dead";
                 enemy.counter = 0;
             }
@@ -275,20 +279,35 @@ function drawPlayer() {
 
 
 
+function startGame() {
+
+    var elem = document.getElementById("button");
+    elem.parentNode.removeChild(elem);
+
+    playing = true;
+
+
+
+}
 
 
 
 
 function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+
     loadMedia();
+
     drawBackground();
+
     drawBall();
     drawPlayer();
-    moveBullets();
     drawBullets();
+
+    moveBullets();
     verifyHit();
     drawEnemies();
+
     // moveEnemies();
     // refreshEnemies();
 
@@ -322,6 +341,6 @@ function draw() {
     ballY += dy;
 }
 
-setInterval(draw, 10);
-setInterval(refreshEnemies, 2000);
-setInterval(moveEnemies, 50)
+// setInterval(draw, 10);
+// setInterval(refreshEnemies, 2000);
+// setInterval(moveEnemies, 50)

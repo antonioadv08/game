@@ -1,16 +1,11 @@
 * {
-    padding: 0;
     
     cursor: none;
 }
 
 canvas {
     background: #eee;
-    display: block;
-    margin: 0 auto;
 }
 
 body{
-    /* background: src("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQLzdrkbZ1YDjA_d_-PdS3f3tysu0CwUmGWqo64tlZTXN_wB2qGeg"); */
-    background-color: green;
 }
