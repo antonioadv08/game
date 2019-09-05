@@ -1,11 +1,11 @@
-* {
-    
-    cursor: none;
-}
+* {}
 
 canvas {
     background: #eee;
+    cursor: none;
 }
 
-body{
+button {
+    cursor: pointer;
+    background-image: url("/images/button.png");
 }

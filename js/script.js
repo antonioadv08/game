@@ -166,7 +166,7 @@ function refreshEnemies() {
         if (!enemy) continue;
         if (enemy && enemy.state == "alive") {
             enemy.counter++;
-            enemy.x += Math.sin(enemy.counter * Math.PI / 90) * 5;
+            // enemy.x += Math.sin(enemy.counter * Math.PI / 90) * 5;
         }
         if (enemy && enemy.state == "hit") {
             enemy.counter++;
@@ -255,6 +255,10 @@ function verifyHit() {
             if (hit(bullet, enemy)) {
                 enemy.state = "hit";
                 enemy.counter = 0;
+
+
+
+
             }
         }
     }
@@ -279,8 +283,11 @@ function startGame() {
     var elem = document.getElementById("button");
     elem.parentNode.removeChild(elem);
 
-    playing = true;
+    var elemcanvas=document.getElementById("myCanvas")
+    elemcanvas.style = null;
 
+
+    playing = true;
 
 
 }
@@ -326,5 +333,5 @@ function draw() {
 }
 
 setInterval(draw, 10);
-setInterval(refreshEnemies, 2000);
-setInterval(moveEnemies, 10)
+setInterval(refreshEnemies, 50);
+setInterval(moveEnemies, 50)
