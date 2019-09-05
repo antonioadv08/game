@@ -21,6 +21,8 @@ var background;
 var imgPlayer, imgBullet, imgEnemies;
 var soundShoot, soundKill;
 var score = 0;
+var lives = 200;
+
 
 
 
@@ -129,6 +131,7 @@ function moveEnemies() {
         var enemy = enemies[i];
         enemy.y += 3;
         enemy.x += Math.random() * (20 - -20) + (-20);
+
     }
     enemies = enemies.filter(function (enemy) {
         return enemy.y > 0;
@@ -161,6 +164,15 @@ function refreshEnemies() {
         if (enemy && enemy.state == "alive") {
             enemy.counter++;
             // enemy.x += Math.sin(enemy.counter * Math.PI / 90) * 5;
+            if (enemy.y > canvas.height) {
+                lives--
+                if (lives === 0) {
+                    alert("you lose");
+                    document.location.reload();}
+               
+            }
+            
+
         }
         if (enemy && enemy.state == "hit") {
             enemy.counter++;
@@ -168,7 +180,6 @@ function refreshEnemies() {
                 enemy.state = "dead";
                 enemy.counter = 0;
                 enemies = enemies.filter(function (arr) {
-                    score++;
                     return arr.state !== 'dead';
                 });
 
@@ -250,6 +261,12 @@ function verifyHit() {
             if (hit(bullet, enemy)) {
                 enemy.state = "hit";
                 enemy.counter = 0;
+                score++;
+                if (score === 50000) {
+                    alert("you win");
+                    document.location.reload();
+
+                }
 
 
 
@@ -267,6 +284,12 @@ function drawScore() {
 
 }
 
+function drawLives() {
+    ctx.font = "50px Arial";
+    ctx.fillStyle = "#25A223";
+    ctx.fillText("Lives: " + lives, 20, (canvas.height / 2) - 70);
+
+}
 
 
 
@@ -305,7 +328,7 @@ function draw() {
     verifyHit();
     drawEnemies();
     drawScore()
-
+    drawLives()
     // moveEnemies();
     // refreshEnemies();
 
@@ -335,4 +358,4 @@ function draw() {
 
 setInterval(draw, 10);
 setInterval(refreshEnemies, 50);
-setInterval(moveEnemies, 50)
+setInterval(moveEnemies, 50);
