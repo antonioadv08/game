@@ -2,13 +2,11 @@ var canvas = document.getElementById("myCanvas");
 var ctx = canvas.getContext("2d");
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
-var ballRadius = 10;
 var x = canvas.width;
 var y = canvas.height;
 var ballX = canvas.width / 2;
 var ballY = canvas.height - 30;
-var dx = 2;
-var dy = -2;
+
 var playerHeight = 75;
 var playerWidth = 75;
 var playerX = (canvas.width - playerWidth) / 2;
@@ -119,15 +117,13 @@ function drawBackground() {
 function drawEnemies() {
     for (i in enemies) {
         var enemy = enemies[i];
-        ctx.save();
+        // ctx.save();
         if (enemy.state == "alive") ctx.fillStyle = "green";
         if (enemy.state == "dead") ctx.fillStyle = "red";
-        // var enemy = (arr, item) => {
-        //     return enemy.filter(e => e !== item);
-        // };
-        ctx.fillRect(enemy.x, enemy.y, enemy.width, enemy.height);
+
+        // ctx.fillRect(enemy.x, enemy.y, enemy.width, enemy.height);
         ctx.drawImage(imgEnemies, enemy.x, enemy.y, enemy.width, enemy.height);
-        ctx.restore();
+        // ctx.restore();
 
 
     }
@@ -148,9 +144,11 @@ function moveEnemies() {
 
 }
 
+
+
 function refreshEnemies() {
     if (playing == true) {
-        for (var i = 0; i < 13; i++) {
+        for (var i = 0; i < 8; i++) {
             enemies.push({
                 x: 10 + (i * 150),
                 y: 10,
@@ -160,8 +158,7 @@ function refreshEnemies() {
                 counter: 0
             });
         }
-        // playing = true;
-
+        playing = true;
 
     }
     for (var i in enemies) {
@@ -169,13 +166,17 @@ function refreshEnemies() {
         if (!enemy) continue;
         if (enemy && enemy.state == "alive") {
             enemy.counter++;
-            // enemy.x += Math.sin(enemy.counter * Math.PI / 90) * 5;
+            enemy.x += Math.sin(enemy.counter * Math.PI / 90) * 5;
         }
         if (enemy && enemy.state == "hit") {
             enemy.counter++;
             if (enemy.counter >= 0) {
                 enemy.state = "dead";
                 enemy.counter = 0;
+                enemies = enemies.filter(function (arr) {
+                    return arr.state !== 'dead';
+                });
+
             }
         }
     }
@@ -263,13 +264,7 @@ function verifyHit() {
 
 
 
-function drawBall() {
-    ctx.beginPath();
-    ctx.arc(ballX, ballY, ballRadius, 0, Math.PI * 2);
-    ctx.fillStyle = "#0095DD";
-    ctx.fill();
-    ctx.closePath();
-}
+
 
 function drawPlayer() {
     ctx.drawImage(imgPlayer, playerX, playerY, playerHeight, playerWidth)
@@ -295,15 +290,10 @@ function startGame() {
 
 function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-
     loadMedia();
-
     drawBackground();
-
-    drawBall();
     drawPlayer();
     drawBullets();
-
     moveBullets();
     verifyHit();
     drawEnemies();
@@ -313,12 +303,7 @@ function draw() {
 
 
 
-    if (ballX + dx > canvas.width - ballRadius || ballX + dx < ballRadius) {
-        dx = -dx;
-    }
-    if (ballY + dy > canvas.height - ballRadius || ballY + dy < ballRadius) {
-        dy = -dy;
-    }
+
     if (rightPressed && playerX < canvas.width - playerWidth) {
         playerX += 7;
     }
@@ -337,10 +322,9 @@ function draw() {
     }
 
 
-    ballX += dx;
-    ballY += dy;
+
 }
 
-// setInterval(draw, 10);
-// setInterval(refreshEnemies, 2000);
-// setInterval(moveEnemies, 50)
+setInterval(draw, 10);
+setInterval(refreshEnemies, 2000);
+setInterval(moveEnemies, 10)
