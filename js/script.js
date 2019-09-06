@@ -134,7 +134,7 @@ function moveEnemies() {
 
     }
     enemies = enemies.filter(function (enemy) {
-        return enemy.y > 0;
+        return enemy.y > 0 && enemy.x > 0 && enemy.y < canvas.height && enemy.x < canvas.width;
     });
 
 
@@ -147,7 +147,7 @@ function refreshEnemies() {
         for (var i = 0; i < 12; i++) {
             enemies.push({
 
-                x: 10 + (i * 150),
+                x: 50 + (i * 150),
                 y: 10,
                 height: 40,
                 width: 40,
@@ -168,10 +168,11 @@ function refreshEnemies() {
                 lives--
                 if (lives === 0) {
                     alert("you lose");
-                    document.location.reload();}
-               
+                    document.location.reload();
+                }
+
             }
-            
+
 
         }
         if (enemy && enemy.state == "hit") {
@@ -357,5 +358,5 @@ function draw() {
 }
 
 setInterval(draw, 10);
-setInterval(refreshEnemies, 50);
+setInterval(refreshEnemies, 1000);
 setInterval(moveEnemies, 50);
