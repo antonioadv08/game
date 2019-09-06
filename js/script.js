@@ -4,8 +4,8 @@ canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 var x = canvas.width;
 var y = canvas.height;
-var playerHeight = 75;
-var playerWidth = 75;
+var playerHeight = 150;
+var playerWidth = 150;
 var playerX = (canvas.width - playerWidth) / 2;
 var playerY = (canvas.height - playerHeight);
 var rightPressed = false;
@@ -19,7 +19,7 @@ var playing = false;
 var startButton;
 var background;
 var imgPlayer, imgBullet, imgEnemies;
-var soundShoot, soundKill;
+var soundShoot, soundKill, soundLose;
 var score = 0;
 var lives = 200;
 
@@ -94,9 +94,12 @@ function loadMedia() {
     imgEnemies.src = "/images/bolsabasura.png";
     imgBullet = new Image();
     imgBullet.src = "/images/cubobasura.png";
-    // soundShoot = document.createElement("audio");
-    // document.body.appendChild(soundShoot);
-    // soundShoot.setAttribute("src", "/sounds/zapsplat_foley_bag_school_rucksack_open_001_33251.mp3")
+    soundShoot = document.createElement("audio");
+    document.body.appendChild(soundShoot);
+    soundShoot.setAttribute("src", "/sounds/zapsplat_foley_bag_school_rucksack_open_001_33251.mp3")
+    soundLose = document.createElement("audio");
+    document.body.appendChild(soundLose);
+    soundLose.setAttribute("src", "/sounds/zapsplat_foley_bag_school_rucksack_open_001_33251.mp3")
 
 
 }
@@ -134,7 +137,7 @@ function moveEnemies() {
 
     }
     enemies = enemies.filter(function (enemy) {
-        return enemy.y > 0 && enemy.x > 0 && enemy.y < canvas.height && enemy.x < canvas.width;
+        return enemy.y > 0 && enemy.x > 0 && enemy.x < canvas.width;
     });
 
 
@@ -149,8 +152,8 @@ function refreshEnemies() {
 
                 x: 50 + (i * 150),
                 y: 10,
-                height: 40,
-                width: 40,
+                height: 80,
+                width: 80,
                 state: "alive",
                 counter: 0
             });
@@ -158,6 +161,7 @@ function refreshEnemies() {
         playing = true;
 
     }
+
     for (var i in enemies) {
         var enemy = enemies[i];
         if (!enemy) continue;
@@ -167,7 +171,10 @@ function refreshEnemies() {
             if (enemy.y > canvas.height) {
                 lives--
                 if (lives === 0) {
-                    alert("you lose");
+                    // alert("you lose");
+                    soundShoot.pause();
+                    soundShoot.currentTime = 0;
+                    soundShoot.play();
                     document.location.reload();
                 }
 
@@ -206,15 +213,15 @@ function moveBullets() {
 }
 
 function shoot() {
-    // soundShoot.pause();
-    // soundShoot.currentTime = 0;
-    // soundShoot.play();
+    soundShoot.pause();
+    soundShoot.currentTime = 0;
+    soundShoot.play();
 
     bullets.push({
         x: playerX + (playerWidth / 2) - 5,
         y: playerY,
-        width: 50,
-        height: 50
+        width: 40,
+        height: 40
     });
 
 }
@@ -349,6 +356,7 @@ function draw() {
         playerY += 7;
     }
     if (!spaceBar == false) {
+
         shoot()
 
     }
@@ -358,5 +366,5 @@ function draw() {
 }
 
 setInterval(draw, 10);
-setInterval(refreshEnemies, 1000);
+setInterval(refreshEnemies, 5000 / 60);
 setInterval(moveEnemies, 50);
