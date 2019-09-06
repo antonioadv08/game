@@ -21,7 +21,7 @@ var background;
 var imgPlayer, imgBullet, imgEnemies;
 var soundShoot, soundKill, soundLose;
 var score = 0;
-var lives = 200;
+var life = 200;
 
 
 
@@ -94,12 +94,12 @@ function loadMedia() {
     imgEnemies.src = "/images/bolsabasura.png";
     imgBullet = new Image();
     imgBullet.src = "/images/cubobasura.png";
-    soundShoot = document.createElement("audio");
-    document.body.appendChild(soundShoot);
-    soundShoot.setAttribute("src", "/sounds/zapsplat_foley_bag_school_rucksack_open_001_33251.mp3")
-    soundLose = document.createElement("audio");
-    document.body.appendChild(soundLose);
-    soundLose.setAttribute("src", "/sounds/zapsplat_foley_bag_school_rucksack_open_001_33251.mp3")
+    // soundShoot = document.createElement("audio");
+    // document.body.appendChild(soundShoot);
+    // soundShoot.setAttribute("src", "/sounds/zapsplat_foley_bag_school_rucksack_open_001_33251.mp3")
+    // soundLose = document.createElement("audio");
+    // document.body.appendChild(soundLose);
+    // soundLose.setAttribute("src", "/sounds/lose.mp3")
 
 
 }
@@ -169,12 +169,12 @@ function refreshEnemies() {
             enemy.counter++;
             // enemy.x += Math.sin(enemy.counter * Math.PI / 90) * 5;
             if (enemy.y > canvas.height) {
-                lives--
-                if (lives === 0) {
-                    // alert("you lose");
-                    soundShoot.pause();
-                    soundShoot.currentTime = 0;
-                    soundShoot.play();
+                life--
+                if (life === 0) {
+                    alert("you lose");
+                    // soundLose.pause();
+                    // soundLose.currentTime = 0;
+                    // soundLose.play();
                     document.location.reload();
                 }
 
@@ -213,15 +213,15 @@ function moveBullets() {
 }
 
 function shoot() {
-    soundShoot.pause();
-    soundShoot.currentTime = 0;
-    soundShoot.play();
+    // soundShoot.pause();
+    // soundShoot.currentTime = 0;
+    // soundShoot.play();
 
     bullets.push({
         x: playerX + (playerWidth / 2) - 5,
         y: playerY,
-        width: 40,
-        height: 40
+        width: 80,
+        height: 80
     });
 
 }
@@ -268,7 +268,7 @@ function verifyHit() {
             var enemy = enemies[j];
             if (hit(bullet, enemy)) {
                 enemy.state = "hit";
-                enemy.counter = 0;
+                // enemy.counter = 0;
                 score++;
                 if (score === 50000) {
                     alert("you win");
@@ -292,10 +292,10 @@ function drawScore() {
 
 }
 
-function drawLives() {
+function drawlife() {
     ctx.font = "50px Arial";
     ctx.fillStyle = "#25A223";
-    ctx.fillText("Lives: " + lives, 20, (canvas.height / 2) - 70);
+    ctx.fillText("life: " + life, 20, (canvas.height / 2) - 70);
 
 }
 
@@ -336,7 +336,7 @@ function draw() {
     verifyHit();
     drawEnemies();
     drawScore()
-    drawLives()
+    drawlife()
     // moveEnemies();
     // refreshEnemies();
 
